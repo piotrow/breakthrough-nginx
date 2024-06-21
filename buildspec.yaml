@@ -7,17 +7,17 @@ phases:
   pre_build:
     commands:
       - printenv
-      - echo $AccountId
+      - echo $ACCOUNT_ID
       - echo logging in to AWS ECR...
-      - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${AccountId}.dkr.ecr.eu-west-2.amazonaws.com
-      - REPOSITORY_URI=${AccountId}.dkr.ecr.eu-west-2.amazonaws.com/breakthrough
+      - aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com
+      - REPOSITORY_URI=${ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/breakthrough
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
   build:
     commands:
       - echo build Docker image on `date`
       - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
-      - docker tag frontend:latest $AccountId.dkr.ecr.eu-west-2.amazonaws.com/frontend:latest
+      - docker tag frontend:latest $ACCOUNT_ID.dkr.ecr.eu-west-2.amazonaws.com/frontend:latest
   post_build:
     commands:
       - echo build Docker image complete `date`
